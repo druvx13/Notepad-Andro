@@ -1,30 +1,30 @@
-name: Build Signed APK  
-  
-on:  
-  push:  
-    branches: [ main, master ]  
-  pull_request:  
-    branches: [ main, master ]  
-  workflow_dispatch:  
-  
-jobs:  
-  build:  
-    runs-on: ubuntu-latest  
-      
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v4  
-        
-      - name: Set up JDK 17  
-        uses: actions/setup-java@v4  
-        with:  
-          java-version: '17'  
-          distribution: 'temurin'  
+name: Build Signed APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
           cache: gradle
-        
-      - name: Grant execute permission for gradlew  
-        run: chmod +x gradlew  
-        
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Create throwaway keystore
         run: >-
           keytool -genkeypair
@@ -36,19 +36,19 @@ jobs:
           -validity 10000
           -storepass throwaway123
           -keypass throwaway123
-          -dname "CN=Throwaway, OU=CI, O=GitHub Actions, L=Cloud, S=Cloud, C=US"  
-        
-      - name: Build signed APK  
-  run: |  
-    ./gradlew assembleRelease \  
-      -Pandroid.injected.signing.store.file=$(pwd)/throwaway.keystore \  
-      -Pandroid.injected.signing.store.password=throwaway123 \  
-      -Pandroid.injected.signing.key.alias=throwaway_key \  
-      -Pandroid.injected.signing.key.password=throwaway123  
-        
-      - name: Upload signed APK  
-        uses: actions/upload-artifact@v4  
-        with:  
-          name: signed-apk  
-          path: app/build/outputs/apk/release/*.apk  
+          -dname "CN=Throwaway, OU=CI, O=GitHub Actions, L=Cloud, S=Cloud, C=US"
+
+      - name: Build signed APK
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=$(pwd)/throwaway.keystore \
+            -Pandroid.injected.signing.store.password=throwaway123 \
+            -Pandroid.injected.signing.key.alias=throwaway_key \
+            -Pandroid.injected.signing.key.password=throwaway123
+
+      - name: Upload signed APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-apk
+          path: app/build/outputs/apk/release/*.apk
           retention-days: 30

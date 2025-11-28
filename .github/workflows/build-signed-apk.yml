@@ -39,12 +39,12 @@ jobs:
           -dname "CN=Throwaway, OU=CI, O=GitHub Actions, L=Cloud, S=Cloud, C=US"  
         
       - name: Build signed APK  
-        run: |  
-          ./gradlew assembleRelease \  
-            -Pandroid.injected.signing.store.file=$(pwd)/throwaway.keystore \  
-            -Pandroid.injected.signing.store.password=throwaway123 \  
-            -Pandroid.injected.signing.key.alias=throwaway_key \  
-            -Pandroid.injected.signing.key.password=throwaway123  
+  run: |  
+    ./gradlew assembleRelease \  
+      -Pandroid.injected.signing.store.file=$(pwd)/throwaway.keystore \  
+      -Pandroid.injected.signing.store.password=throwaway123 \  
+      -Pandroid.injected.signing.key.alias=throwaway_key \  
+      -Pandroid.injected.signing.key.password=throwaway123  
         
       - name: Upload signed APK  
         uses: actions/upload-artifact@v4  

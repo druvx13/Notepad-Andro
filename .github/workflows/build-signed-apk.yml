@@ -25,18 +25,18 @@ jobs:
       - name: Grant execute permission for gradlew  
         run: chmod +x gradlew  
         
-      - name: Create throwaway keystore  
-        run: |  
-          keytool -genkeypair \  
-            -v \  
-            -keystore throwaway.keystore \  
-            -alias throwaway_key \  
-            -keyalg RSA \  
-            -keysize 2048 \  
-            -validity 10000 \  
-            -storepass throwaway123 \  
-            -keypass throwaway123 \  
-            -dname "CN=Throwaway, OU=CI, O=GitHub Actions, L=Cloud, S=Cloud, C=US"  
+      - name: Create throwaway keystore
+        run: >-
+          keytool -genkeypair
+          -v
+          -keystore throwaway.keystore
+          -alias throwaway_key
+          -keyalg RSA
+          -keysize 2048
+          -validity 10000
+          -storepass throwaway123
+          -keypass throwaway123
+          -dname "CN=Throwaway, OU=CI, O=GitHub Actions, L=Cloud, S=Cloud, C=US"  
         
       - name: Build signed APK  
         run: |  
